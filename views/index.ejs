@@ -15,17 +15,27 @@
     </select>
     <button type="submit">Add Task</button>
   </form>
+
+  <script>
+    function toggleEditForm(taskId) {
+      const form = document.getElementById(`edit-form-${taskId}`);
+      form.style.display = form.style.display === 'none' ? 'inline' : 'none';
+    }
+  </script>
+
   <ul>
     <% tasks.forEach(task => { %>
       <li>
-        <form action="/edit/<%= task._id %>" method="POST" style="display:inline;">
+        <span><%= task.title %> (<%= task.priority %>)</span>
+        <button onclick="toggleEditForm('<%= task._id %>')">Edit</button>
+        <form id="edit-form-<%= task._id %>" action="/edit/<%= task._id %>" method="POST" style="display:none;">
           <input type="text" name="title" value="<%= task.title %>" required>
           <select name="priority">
             <option value="low" <%= task.priority === 'low' ? 'selected' : '' %>>Low</option>
             <option value="medium" <%= task.priority === 'medium' ? 'selected' : '' %>>Medium</option>
             <option value="high" <%= task.priority === 'high' ? 'selected' : '' %>>High</option>
           </select>
-          <button type="submit">Edit</button>
+          <button type="submit">Save</button>
         </form>
         <form action="/delete/<%= task._id %>" method="POST" style="display:inline;">
           <button type="submit">Delete</button>
